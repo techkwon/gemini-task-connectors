@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제미나이 태스크 × 커넥터</title>
+<meta name="description" content="제미나이 웹 태스크(Task) 모드에 캔바·카훗·패들렛·노션 커넥터(MCP)를 연결해 수업 자료를 한 번에 만들어 본 결과와 연결 방법. 누구나쉽게 시리즈 영상 자료 페이지.">
+<meta name="theme-color" content="#101A1C">
+<meta property="og:title" content="제미나이 태스크 × 커넥터">
+<meta property="og:description" content="한 번의 요청으로 캔바 발표 자료·카훗 퀴즈·패들렛 보드·노션 지도안까지. 직접 돌려 본 결과와 연결 방법을 정리했어요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --panel:#101A1C;
+  --panel-2:#142225;
+  --panel-3:#1A2C30;
+  --line:#2B3F43;
+  --line-soft:#213337;
+  --brass:#D4A84B;
+  --brass-soft:rgba(212,168,75,.12);
+  --brass-line:rgba(212,168,75,.38);
+  --text:#ECE7DB;
+  --muted:#A9B3AF;
+  --faint:#7F8C88;
+  --alert:#F2A65A;
+  --alert-bg:rgba(242,166,90,.10);
+  --ok:#7FD1A8;
+  --canva:#00C4CC;
+  --kahoot:#8C5CF6;
+  --kahoot-text:#B79BFF;
+  --padlet:#FF6B6B;
+  --notion:#E8E6E1;
+  --radius:12px;
+  --gutter:16px;
+  --wrap:1080px;
+  --font-head:"Noto Sans KR",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans KR","Noto Sans KR",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","IBM Plex Sans KR",ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--panel);color:var(--text);
+  font-family:var(--font-body);font-size:16px;line-height:1.7;
+  word-break:keep-all;overflow-wrap:anywhere;
+  background-image:radial-gradient(circle at 1px 1px,rgba(212,168,75,.06) 1px,transparent 0);
+  background-size:22px 22px;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--brass);text-underline-offset:3px}
+a:hover{color:#E8C26E}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--font-head);line-height:1.3;margin:0;letter-spacing:-.01em}
+p{margin:0 0 1em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+@media (min-width:768px){:root{--gutter:28px}}
+
+.skip{position:absolute;left:12px;top:-60px;background:var(--brass);color:#111;padding:8px 14px;border-radius:8px;z-index:100;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(16,26,28,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.topbar__in{display:flex;align-items:center;gap:16px;min-height:56px}
+.brand{font-family:var(--font-head);font-weight:900;color:var(--text);text-decoration:none;white-space:nowrap;font-size:15px}
+.brand span{color:var(--brass)}
+.nav{display:flex;gap:4px;list-style:none;margin:0;padding:0;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{display:block;padding:8px 10px;color:var(--muted);text-decoration:none;font-size:14px;white-space:nowrap;border-radius:8px}
+.nav a:hover{color:var(--text);background:var(--panel-3)}
+@media (max-width:640px){.brand{display:none}}
+
+/* sections */
+.section{padding:64px 0;border-top:1px solid var(--line-soft)}
+@media (min-width:768px){.section{padding:88px 0}}
+.line-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase;margin-bottom:12px}
+.line-tag::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid var(--brass);background:var(--panel)}
+.section h2{font-size:clamp(26px,5vw,38px);font-weight:900;margin-bottom:14px}
+.lede{color:var(--muted);max-width:720px;font-size:17px}
+.section h3{font-size:20px;font-weight:700}
+
+/* hero */
+.hero{padding:48px 0 64px}
+@media (min-width:900px){.hero{padding:80px 0 96px}}
+.hero__grid{display:grid;gap:32px;align-items:center}
+@media (min-width:900px){.hero__grid{grid-template-columns:1.1fr .9fr;gap:48px}}
+.eyebrow{font-family:var(--font-mono);font-size:13px;color:var(--brass);letter-spacing:.06em;margin-bottom:16px}
+.hero h1{font-size:clamp(30px,6.4vw,52px);font-weight:900}
+.hero h1 .q{display:block;color:var(--brass);margin-top:6px;font-size:.72em}
+.hero__summary{margin-top:22px;font-size:18px;color:var(--text);max-width:600px}
+.hero__summary strong{color:var(--brass);font-weight:600}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;font-weight:600;text-decoration:none;font-size:16px;border:1px solid transparent;cursor:pointer;font-family:var(--font-body)}
+.btn--brass{background:var(--brass);color:#16120A}
+.btn--brass:hover{background:#E3BA62;color:#16120A}
+.btn--ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn--ghost:hover{border-color:var(--brass-line);color:var(--text)}
+.btn svg{width:18px;height:18px}
+.hero__by{margin-top:22px;color:var(--faint);font-size:14px}
+.board{background:linear-gradient(180deg,#17272A,#122023);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.board svg{width:100%;height:auto;display:block}
+.cord{fill:none;stroke-width:5;stroke-linecap:round}
+@media (prefers-reduced-motion:no-preference){
+  .cord{stroke-dasharray:640;stroke-dashoffset:640;animation:patch 1.4s cubic-bezier(.4,0,.2,1) forwards}
+  .cord:nth-of-type(2){animation-delay:.15s}
+  .cord:nth-of-type(3){animation-delay:.3s}
+  .cord:nth-of-type(4){animation-delay:.45s}
+  @keyframes patch{to{stroke-dashoffset:0}}
+}
+
+/* free section */
+.fact-grid{display:grid;gap:16px;margin-top:28px}
+@media (min-width:768px){.fact-grid{grid-template-columns:1.3fr 1fr}}
+.card{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.card h3{margin-bottom:12px}
+.countries{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:6px 0 16px;padding:0}
+.countries li{border:1px solid var(--brass-line);background:var(--brass-soft);color:var(--text);padding:4px 12px;border-radius:999px;font-size:15px;font-weight:500}
+.countries li.kr{background:var(--brass);color:#16120A;border-color:var(--brass);font-weight:600}
+.src{font-size:14px;color:var(--muted)}
+.src a{word-break:break-all}
+.note{border-left:3px solid var(--brass);background:var(--brass-soft);padding:16px 18px;border-radius:0 var(--radius) var(--radius) 0}
+.note p:last-child{margin:0}
+.facts{margin:0;padding-left:1.2em}
+.facts li{margin-bottom:6px}
+
+/* steps */
+.steps{list-style:none;margin:36px 0 0;padding:0;counter-reset:step;display:grid;gap:28px}
+.step{display:grid;gap:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:20px;counter-increment:step}
+@media (min-width:880px){.step{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:28px;padding:26px;align-items:start}}
+.step__head{display:flex;gap:14px;align-items:flex-start}
+.step__num{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid var(--brass);display:grid;place-items:center;font-family:var(--font-mono);font-weight:500;color:var(--brass);background:var(--panel)}
+.step__num::before{content:counter(step,lower-alpha)}
+.step h3{font-size:19px;margin-top:6px}
+.step p{color:var(--muted);margin-top:10px}
+.step p:last-child{margin-bottom:0}
+.kbd{font-family:var(--font-mono);font-size:.9em;background:var(--panel-3);border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--text);white-space:nowrap}
+.shot{margin:0}
+.shot a{display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.shot img{width:100%}
+.shot figcaption{font-size:13px;color:var(--faint);margin-top:8px}
+.shot-pair{display:grid;gap:14px}
+
+.warn{margin-top:32px;border:1px solid rgba(242,166,90,.55);background:var(--alert-bg);border-radius:var(--radius);padding:22px 22px 20px;position:relative}
+.warn__title{display:flex;gap:10px;align-items:center;font-family:var(--font-head);font-weight:900;font-size:20px;color:var(--alert);margin-bottom:10px}
+.warn__title svg{flex:none;width:24px;height:24px}
+.warn p{margin-bottom:10px}
+.warn blockquote{margin:12px 0 0;padding:12px 16px;border-left:3px solid var(--alert);background:rgba(0,0,0,.22);border-radius:0 8px 8px 0;color:var(--text)}
+.warn blockquote cite{display:block;font-style:normal;color:var(--faint);font-size:13px;margin-top:6px}
+.warn--sm{margin-top:18px;padding:16px 18px}
+.warn--sm .warn__title{font-size:16px;margin-bottom:6px}
+.warn--sm p:last-child{margin:0}
+
+/* connector table */
+.table-wrap{margin-top:32px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel-2)}
+table.conn{width:100%;border-collapse:collapse;font-size:15px}
+.conn th,.conn td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-soft)}
+.conn thead th{font-size:13px;font-weight:600;color:var(--muted);background:var(--panel-3);white-space:nowrap}
+.conn tbody tr:last-child th,.conn tbody tr:last-child td{border-bottom:0}
+.conn .num{text-align:right;font-family:var(--font-mono);font-size:16px;white-space:nowrap}
+.conn tr.main{background:linear-gradient(90deg,rgba(212,168,75,.07),transparent 60%)}
+.conn tr.group-break th,.conn tr.group-break td{border-top:2px solid var(--line)}
+.svc{display:flex;gap:10px;align-items:flex-start}
+.jack{flex:none;width:14px;height:14px;border-radius:50%;margin-top:5px;border:3px solid var(--c);box-shadow:0 0 0 2px var(--panel-2),0 0 0 3px var(--brass-line)}
+.svc__name{font-weight:600;color:var(--text);display:block}
+.svc__handle{font-family:var(--font-mono);font-size:12px;color:var(--faint);display:block}
+.pin{display:inline-block;font-size:11px;font-weight:600;color:#16120A;background:var(--brass);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.addr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.addr code{font-family:var(--font-mono);font-size:14px;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 8px;word-break:break-all}
+.copy{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--brass);background:transparent;border:1px solid var(--brass-line);border-radius:999px;padding:4px 12px;min-height:32px;cursor:pointer;white-space:nowrap}
+.copy:hover{background:var(--brass-soft)}
+.copy.is-done{color:var(--ok);border-color:rgba(127,209,168,.5)}
+.teach{color:var(--muted)}
+@media (min-width:761px){
+  .conn .addr{flex-wrap:nowrap}
+  .conn .addr code{white-space:nowrap;word-break:normal}
+  .conn .svc__handle{white-space:nowrap}
+}
+.table-note{font-size:14px;color:var(--faint);margin-top:12px}
+@media (max-width:760px){
+  table.conn,.conn tbody,.conn tr,.conn td,.conn th{display:block;width:100%}
+  .conn thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .conn tbody tr{padding:16px;border-bottom:1px solid var(--line)}
+  .conn tbody tr:last-child{border-bottom:0}
+  .conn th,.conn td{padding:0;border:0}
+  .conn tr.group-break{border-top:2px solid var(--line)}
+  .conn tr.group-break th,.conn tr.group-break td{border-top:0}
+  .conn td{margin-top:10px}
+  .conn td[data-label]::before{content:attr(data-label);display:block;font-size:12px;color:var(--faint);margin-bottom:2px}
+  .conn td.num{display:inline-block;width:auto;margin-right:24px;text-align:left}
+}
+
+/* demo */
+.prompt{margin-top:28px;background:#0B1315;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.prompt__bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line-soft);background:var(--panel-3);font-size:13px;color:var(--muted)}
+.prompt__body{padding:18px;font-family:var(--font-mono);font-size:14.5px;line-height:1.85;white-space:pre-wrap;color:var(--text);margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:16px 18px 0}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-body);font-size:13.5px;font-weight:600;padding:4px 12px 4px 8px;border-radius:999px;background:var(--panel-3);border:1px solid var(--line);color:var(--text)}
+.chip i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.prompt__hint{font-size:13px;color:var(--faint);padding:0 18px 16px;margin:0}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px}
+.stat{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.stat b{display:block;font-family:var(--font-head);font-weight:900;font-size:34px;color:var(--brass);line-height:1.1}
+.stat span{font-size:14px;color:var(--muted)}
+
+.frames{display:grid;gap:16px;margin-top:28px}
+@media (min-width:900px){.frames{grid-template-columns:repeat(3,1fr)}}
+
+.result{margin-top:28px;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden}
+.result::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+@media (min-width:768px){.result{padding:28px 30px}}
+.result__head{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-bottom:14px}
+.result__head h3{font-size:22px;font-weight:900}
+.badge{font-size:13px;font-weight:600;border-radius:999px;padding:3px 12px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+.badge--ok{color:var(--ok);border-color:rgba(127,209,168,.45)}
+.badge--warn{color:var(--alert);border-color:rgba(242,166,90,.5)}
+.result__title{color:var(--muted);font-size:15px;margin-bottom:16px}
+.result__title q{color:var(--text)}
+
+.slides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;list-style:none;margin:18px 0 0;padding:0}
+@media (min-width:900px){.slides{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.slides figure{margin:0}
+.slides img{border-radius:8px;border:1px solid var(--line);aspect-ratio:596/335;object-fit:cover;width:100%}
+.slides figcaption{font-size:13.5px;margin-top:6px;color:var(--text);line-height:1.45}
+.slides figcaption .n{font-family:var(--font-mono);color:var(--brass);margin-right:4px}
+.flag{display:inline-block;margin-top:4px;font-size:12px;color:var(--alert);border:1px solid rgba(242,166,90,.45);border-radius:4px;padding:0 6px}
+
+.quiz{list-style:none;margin:16px 0 0;padding:0;counter-reset:q;display:grid;gap:10px}
+.quiz>li{counter-increment:q;background:var(--panel);border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px}
+.quiz__q{font-weight:500;margin:0 0 10px;display:flex;gap:10px}
+.quiz__q::before{content:counter(q);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--kahoot);color:#fff;font-family:var(--font-mono);font-size:13px;margin-top:1px}
+.choices{list-style:none;margin:0;padding:0 0 0 36px;display:grid;grid-template-columns:1fr;gap:6px}
+@media (min-width:700px){.choices{grid-template-columns:1fr 1fr}}
+.choices li{font-size:14.5px;color:var(--muted);padding:5px 10px;border-radius:6px;border:1px solid transparent;line-height:1.5}
+.choices li.ans{color:var(--text);border-color:rgba(127,209,168,.55);background:rgba(127,209,168,.08);font-weight:500}
+.choices li.ans::before{content:"✓ ";color:var(--ok);font-weight:700}
+
+.padlet-shot{margin-top:6px}
+.padlet-shot a{background:#4a3424}
+
+.flow{margin-top:14px}
+.flow__bar{display:flex;border-radius:8px;overflow:hidden;border:1px solid var(--line);min-height:62px}
+.flow__seg{padding:8px 8px;font-size:13px;line-height:1.35;border-right:1px solid var(--panel);background:var(--panel-3);color:var(--text);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.flow__seg:last-child{border-right:0}
+.flow__seg b{font-family:var(--font-mono);font-weight:500;color:var(--brass);font-size:12.5px}
+.flow__seg:nth-child(odd){background:#1F3337}
+@media (max-width:640px){
+  .flow__bar{flex-direction:column}
+  .flow__seg{flex:none!important;flex-direction:row;justify-content:space-between;border-right:0;border-bottom:1px solid var(--panel);padding:10px 12px;font-size:14px}
+  .flow__seg:last-child{border-bottom:0}
+}
+.notion-list{margin:0;padding-left:1.2em}
+.notion-list li{margin-bottom:6px}
+.mismatch{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px}
+.mismatch th,.mismatch td{padding:8px 10px;border-bottom:1px solid rgba(242,166,90,.22);text-align:left}
+.mismatch thead th{color:var(--muted);font-weight:600;font-size:13px}
+.mismatch tr:last-child td,.mismatch tr:last-child th{border-bottom:0}
+.two{display:grid;gap:24px}
+@media (min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.label{font-size:13px;color:var(--faint);font-weight:600;margin:0 0 6px;letter-spacing:.02em}
+
+/* checklist */
+.checklist{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:12px}
+.checklist li{display:flex;gap:16px;align-items:flex-start;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.checklist .box{flex:none;width:26px;height:26px;border:2px solid var(--brass);border-radius:6px;display:grid;place-items:center;margin-top:2px}
+.checklist .box svg{width:16px;height:16px;stroke:var(--brass)}
+.checklist b{display:block;font-size:17px;font-weight:600;color:var(--text)}
+.checklist span.d{color:var(--muted);font-size:15px}
+
+/* footer */
+.footer{border-top:1px solid var(--line);padding:48px 0 64px;background:#0C1416}
+.footer__grid{display:grid;gap:24px}
+@media (min-width:768px){.footer__grid{grid-template-columns:1.2fr 1fr;align-items:end}}
+.footer h2{font-size:22px;font-weight:900;margin-bottom:8px}
+.footer p{color:var(--muted);font-size:15px}
+.footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.footer li a{font-weight:600}
+.footer small{display:block;color:var(--faint);font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="#top">누구나쉽게 <span aria-hidden="true">·</span> TechKwon</a>
+    <nav aria-label="페이지 안 이동" style="flex:1;min-width:0">
+      <ul class="nav">
+        <li><a href="#free">한국은 무료?</a></li>
+        <li><a href="#howto">연결하는 법</a></li>
+        <li><a href="#connectors">커넥터 주소</a></li>
+        <li><a href="#demo">실제로 돌려 봤다</a></li>
+        <li><a href="#check">쓰기 전에 꼭</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 1. Hero -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap hero__grid">
+      <div>
+        <p class="eyebrow">누구나쉽게 · 영상 자료 페이지 · 2026-11-23 확인</p>
+        <h1 id="hero-title">이제 제미나이가 캔바, 카훗, 노션, 패들렛을 마음대로 조종한다<span class="q">그런데 한국은 무료라고?</span></h1>
+        <p class="hero__summary">제미나이 웹의 <strong>'태스크(Task)' 모드</strong>에 <strong>커스텀 커넥터(MCP)</strong>를 연결하고 <span class="kbd">@</span>로 부르면, 한 번의 요청으로 캔바 발표 자료·카훗 퀴즈·패들렛 보드·노션 지도안을 실제로 만들어 줘요.</p>
+        <div class="hero__actions">
+          <a class="btn btn--brass" id="video-link" href="#">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+            영상 보기
+          </a>
+          <a class="btn btn--ghost" href="#howto">연결하는 법 보기</a>
+        </div>
+        <p class="hero__by">TechKwon(테크권) · 유튜브 채널 「누구나쉽게」</p>
+      </div>
+
+      <div class="board" role="img" aria-label="교환대 그림: 제미나이 태스크에서 나온 네 가닥 코드가 캔바, 카훗, 패들렛, 노션 단자에 꽂혀 있어요.">
+        <svg viewBox="0 0 520 330" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="brassPlate" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#D9B259"/>
+              <stop offset="1" stop-color="#A9822F"/>
+            </linearGradient>
+          </defs>
+          <!-- operator plug block -->
+          <rect x="22" y="128" width="132" height="74" rx="10" fill="#0B1315" stroke="#D4A84B" stroke-opacity=".55"/>
+          <text x="88" y="158" text-anchor="middle" fill="#ECE7DB" font-family="Noto Sans KR, sans-serif" font-weight="900" font-size="19">Gemini</text>
+          <text x="88" y="182" text-anchor="middle" fill="#D4A84B" font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="2">TASK</text>
+          <!-- cords -->
+          <path class="cord" stroke="#00C4CC" d="M154 150 C 250 150, 250 58, 352 58"/>
+          <path class="cord" stroke="#8C5CF6" d="M154 160 C 240 175, 260 128, 352 128"/>
+          <path class="cord" stroke="#FF6B6B" d="M154 172 C 250 210, 250 198, 352 198"/>
+          <path class="cord" stroke="#E8E6E1" d="M154 182 C 230 280, 270 268, 352 268"/>
+          <!-- brass panel -->
+          <rect x="336" y="22" width="166" height="286" rx="10" fill="url(#brassPlate)"/>
+          <rect x="344" y="30" width="150" height="270" rx="6" fill="none" stroke="#5E4818" stroke-opacity=".5"/>
+          <g font-family="Noto Sans KR, sans-serif" font-weight="700" font-size="17" fill="#22190A">
+            <circle cx="366" cy="58" r="13" fill="#2A200C"/><circle cx="366" cy="58" r="6" fill="#00C4CC"/>
+            <text x="390" y="64">Canva</text>
+            <circle cx="366" cy="128" r="13" fill="#2A200C"/><circle cx="366" cy="128" r="6" fill="#8C5CF6"/>
+            <text x="390" y="134">Kahoot</text>
+            <circle cx="366" cy="198" r="13" fill="#2A200C"/><circle cx="366" cy="198" r="6" fill="#FF6B6B"/>
+            <text x="390" y="204">Padlet</text>
+            <circle cx="366" cy="268" r="13" fill="#2A200C"/><circle cx="366" cy="268" r="6" fill="#E8E6E1"/>
+            <text x="390" y="274">Notion</text>
+          </g>
+          <g fill="#5E4818" opacity=".6">
+            <circle cx="350" cy="36" r="2.5"/><circle cx="488" cy="36" r="2.5"/>
+            <circle cx="350" cy="294" r="2.5"/><circle cx="488" cy="294" r="2.5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 한국은 무료? -->
+  <section class="section" id="free" aria-labelledby="free-title">
+    <div class="wrap">
+      <p class="line-tag">Line 01</p>
+      <h2 id="free-title">한국은 무료?</h2>
+      <p class="lede">발표 내용만 그대로 옮겼어요. 확인하지 못한 부분은 확인하지 못했다고 적었어요.</p>
+
+      <div class="fact-grid">
+        <div class="card">
+          <h3>태스크(Task)는 6개 나라에 무료로 풀려요</h3>
+          <p>구글 코리아 블로그에 따르면 제미나이의 태스크 기능이 아래 6개 나라 사용자에게 <strong>무료로 순차 제공</strong>돼요.</p>
+          <ul class="countries" aria-label="무료 제공 국가">
+            <li>미국</li><li class="kr">한국</li><li>일본</li><li>캐나다</li><li>호주</li><li>인도</li>
+          </ul>
+          <ul class="facts">
+            <li>가게에 전화로 문의해 주는 기능과 Google Pay 결제는 <strong>미국에서만</strong> 돼요.</li>
+          </ul>
+          <p class="src" style="margin-top:14px">출처: <a href="https://blog.google/intl/ko-kr/company-news/technology/tasks-in-gemini-free-new-features-kr/" rel="noopener" target="_blank">구글 코리아 블로그</a> · 영어 보도 <a href="https://www.techrepublic.com/article/news-google-gemini-tasks-free-six-countries/" rel="noopener" target="_blank">TechRepublic</a></p>
+        </div>
+        <div class="note">
+          <h3 style="font-size:18px;margin-bottom:10px">솔직하게 적어 둘게요</h3>
+          <p>태스크가 무료인 것과 별개로, <strong>커스텀 커넥터까지 무료 계정에서 되는지는 직접 확인하지 못했어요.</strong></p>
+          <p>커스텀 커넥터 조건은 구글 도움말을 먼저 확인해 주세요.</p>
+          <p class="src"><a href="https://support.google.com/gemini/answer/17209137" rel="noopener" target="_blank">support.google.com/gemini/answer/17209137</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 연결하는 법 -->
+  <section class="section" id="howto" aria-labelledby="howto-title">
+    <div class="wrap">
+      <p class="line-tag">Line 02</p>
+      <h2 id="howto-title">연결하는 법</h2>
+      <p class="lede">한 번만 연결해 두면 다음부터는 <span class="kbd">@</span>로 부르기만 하면 돼요. 화면은 2026-11-23 기준이에요.</p>
+
+      <ol class="steps">
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>입력창 아래에서 Chat → Task로 바꿔요</h3></div>
+            <p><span class="kbd">gemini.google.com</span>에 들어가면 입력창 바로 아래에 <span class="kbd">Chat</span> · <span class="kbd">Task</span> 전환 버튼이 있어요. <strong>Task</strong>를 눌러요.</p>
+          </div>
+          <figure class="shot">
+            <a href="img/step1-task.jpg" target="_blank" rel="noopener"><img src="img/step1-task.jpg" width="1024" height="640" loading="lazy" alt="제미나이 첫 화면. 입력창 아래에 Chat과 Task 전환 버튼이 있어요."></a>
+          </figure>
+        </li>
+
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>설정 → 커넥터(Connectors) 화면에서 「+ Custom」</h3></div>
+            <p>설정에서 <strong>커넥터</strong> 화면으로 가면 Discover · Connectors · Skills 탭이 보여요. 오른쪽 위 <span class="kbd">+ Custom</span>을 눌러요.</p>
+          </div>
+          <figure class="shot">
+            <a href="img/step2-connectors.jpg" target="_blank" rel="noopener"><img src="img/step2-connectors.jpg" width="1152" height="542" loading="lazy" alt="Connectors 화면. 오른쪽 위에 + Custom 버튼이 있고, 아래에 설치된 커넥터 목록이 보여요."></a>
+          </figure>
+        </li>
+
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>「Connect to an MCP server」에 주소 붙여넣기</h3></div>
+            <p>아래 <a href="#connectors">커넥터 표</a>에서 주소를 복사해 <strong>MCP Server URL</strong> 칸에 붙여 넣어요.</p>
+            <p>이때 <strong>구글이 검토하지 않은 앱</strong>이라는 경고가 나와요. 믿을 수 있는 서비스 주소인지 꼭 확인하세요.</p>
+          </div>
+          <figure class="shot">
+            <a href="img/step3-custom.jpg" target="_blank" rel="noopener"><img src="img/step3-custom.jpg" width="1152" height="542" loading="lazy" alt="Connect to an MCP server 창. MCP Server URL 입력칸과, 구글이 검토하지 않은 커스텀 앱이라는 안내 문구가 있어요."></a>
+          </figure>
+        </li>
+
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>서비스 로그인·권한 허용 뒤 Custom apps에 보여요</h3></div>
+            <p>각 서비스(캔바, 카훗, 패들렛, 노션…)의 로그인 창이 뜨면 로그인하고 권한을 허용해요(OAuth). 끝나면 커넥터 목록 아래쪽 <strong>Custom apps</strong>에 나타나요.</p>
+          </div>
+          <figure class="shot">
+            <a href="img/step4-custom-list.jpg" target="_blank" rel="noopener"><img src="img/step4-custom-list.jpg" width="1152" height="542" loading="lazy" alt="커넥터 목록의 Custom apps 영역. Kahoot MCP Server, Notion MCP, Drawio Mcp App, Canva MCP Server, Padlet MCP Server 등이 보여요."></a>
+          </figure>
+        </li>
+
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>커넥터 상세: 동작마다 승인 방식을 정해요</h3></div>
+            <p>커넥터를 누르면 동작(App actions)이 <strong>읽기</strong>와 <strong>쓰기·삭제</strong>로 나뉘어 있고, 동작마다 승인 방식을 고를 수 있어요. 기본값은 <span class="kbd">Always ask</span>(매번 묻기)예요.</p>
+          </div>
+          <figure class="shot">
+            <a href="img/step5-detail.jpg" target="_blank" rel="noopener"><img src="img/step5-detail.jpg" width="1152" height="542" loading="lazy" alt="Padlet MCP Server 상세 화면. Read only 7개 동작이 모두 Always ask로 되어 있어요."></a>
+          </figure>
+        </li>
+
+        <li class="step">
+          <div>
+            <div class="step__head"><span class="step__num" aria-hidden="true"></span><h3>Task 입력창에서 @ → 이름 입력 → 목록에서 고르기</h3></div>
+            <p><span class="kbd">@</span>를 누르고 이름을 조금 치면 Connectors 목록이 떠요. 여기서 <strong>골라야</strong> 입력창에 칩으로 들어가요.</p>
+          </div>
+          <div class="shot-pair">
+            <figure class="shot">
+              <a href="img/step6-mention.jpg" target="_blank" rel="noopener"><img src="img/step6-mention.jpg" width="1152" height="542" loading="lazy" alt="입력창에 @Kah를 치자 아래에 Connectors 목록과 Kahoot MCP Server가 떠요."></a>
+              <figcaption>@Kah까지 치면 목록이 떠요.</figcaption>
+            </figure>
+            <figure class="shot">
+              <a href="img/step6-chip.jpg" target="_blank" rel="noopener"><img src="img/step6-chip.jpg" width="1152" height="542" loading="lazy" alt="목록에서 고르자 입력창에 @Kahoot MCP Server가 칩으로 들어갔어요. 아래는 Task가 선택된 상태예요."></a>
+              <figcaption>목록에서 고르면 칩이 돼요.</figcaption>
+            </figure>
+          </div>
+        </li>
+      </ol>
+
+      <div class="warn" role="note" aria-labelledby="warn-chip">
+        <p class="warn__title" id="warn-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/></svg>
+          글자로 「@Canva MCP」라고만 쓰면 연결이 안 돼요
+        </p>
+        <p>프롬프트에 <span class="kbd">@Canva MCP</span>처럼 글자만 적으면 제미나이는 커넥터를 부르지 않아요. 반드시 <span class="kbd">@</span>를 누르고 <strong>목록에서 골라 칩</strong>으로 넣어야 해요.</p>
+        <blockquote>
+          “현재 Canva, Kahoot, Padlet, Notion 연동 기능이 연결되어 있지 않아…”
+          <cite>첫 시도(글자로만 적었을 때) 제미나이의 답</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 커넥터 표 -->
+  <section class="section" id="connectors" aria-labelledby="conn-title">
+    <div class="wrap">
+      <p class="line-tag">Line 03</p>
+      <h2 id="conn-title">커넥터 주소 한눈에</h2>
+      <p class="lede">위 <strong>c단계</strong>에 붙여 넣을 주소예요. 읽기·쓰기 동작 수는 커넥터 상세 화면에 보이는 숫자를 그대로 옮겼어요.</p>
+
+      <div class="table-wrap">
+        <table class="conn">
+          <caption class="sr-only">제미나이 커스텀 커넥터 주소와 동작 수</caption>
+          <thead>
+            <tr>
+              <th scope="col">서비스</th>
+              <th scope="col">MCP 주소</th>
+              <th scope="col" class="num">읽기</th>
+              <th scope="col" class="num">쓰기·삭제</th>
+              <th scope="col">교사가 할 수 있는 일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="main">
+              <th scope="row"><div class="svc"><span class="jack" style="--c:var(--kahoot)" aria-hidden="true"></span><div><span class="svc__name">Kahoot<span class="pin">시연</span></span><span class="svc__handle">@Kahoot MCP Server</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.kahoot.it/mcp</code><button type="button" class="copy" data-copy="https://mcp.kahoot.it/mcp" aria-label="Kahoot 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">4</td>
+              <td class="num" data-label="쓰기·삭제">1</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">4지선다 퀴즈를 새로 만들거나 고치고, 미리보기·편집 링크를 받아요. 쓰기 동작은 「만들기·고치기」 하나뿐이에요.</td>
+            </tr>
+            <tr class="main">
+              <th scope="row"><div class="svc"><span class="jack" style="--c:var(--canva)" aria-hidden="true"></span><div><span class="svc__name">Canva<span class="pin">시연</span></span><span class="svc__handle">@Canva MCP Server</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.canva.com/mcp</code><button type="button" class="copy" data-copy="https://mcp.canva.com/mcp" aria-label="Canva 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">18</td>
+              <td class="num" data-label="쓰기·삭제">16</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">주제만 주면 발표 자료 초안을 만들고, 내 디자인을 찾아 고치거나 크기를 바꾸고 파일로 내보내요.</td>
+            </tr>
+            <tr class="main">
+              <th scope="row"><div class="svc"><span class="jack" style="--c:var(--padlet)" aria-hidden="true"></span><div><span class="svc__name">Padlet<span class="pin">시연</span></span><span class="svc__handle">@Padlet MCP Server</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.padlet.com</code><button type="button" class="copy" data-copy="https://mcp.padlet.com" aria-label="Padlet 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">7</td>
+              <td class="num" data-label="쓰기·삭제">15</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">보드를 만들고 섹션·예시 글·댓글을 채워요. 레이아웃·디자인과 공유 설정까지 바꿀 수 있어요.</td>
+            </tr>
+            <tr class="main">
+              <th scope="row"><div class="svc"><span class="jack" style="--c:var(--notion)" aria-hidden="true"></span><div><span class="svc__name">Notion<span class="pin">시연</span></span><span class="svc__handle">@Notion MCP</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.notion.com/mcp</code><button type="button" class="copy" data-copy="https://mcp.notion.com/mcp" aria-label="Notion 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">39</td>
+              <td class="num" data-label="쓰기·삭제">38</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">지도안 페이지를 만들고 고치며, 데이터베이스·댓글·캘린더까지 다뤄요. 페이지 삭제 동작도 들어 있어요.</td>
+            </tr>
+            <tr class="group-break">
+              <th scope="row"><div class="svc"><span class="jack" style="--c:#9AA6A2" aria-hidden="true"></span><div><span class="svc__name">Gamma</span><span class="svc__handle">@Gamma Mcp</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.gamma.app/mcp</code><button type="button" class="copy" data-copy="https://mcp.gamma.app/mcp" aria-label="Gamma 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">16</td>
+              <td class="num" data-label="쓰기·삭제">9</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">글만 주면 발표 자료(템플릿 활용 포함)를 생성·편집하고 내보내요. 조회 통계도 읽어요.</td>
+            </tr>
+            <tr>
+              <th scope="row"><div class="svc"><span class="jack" style="--c:#9AA6A2" aria-hidden="true"></span><div><span class="svc__name">Tally</span><span class="svc__handle">@Tally Forms MCP</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://api.tally.so/mcp</code><button type="button" class="copy" data-copy="https://api.tally.so/mcp" aria-label="Tally 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">10</td>
+              <td class="num" data-label="쓰기·삭제">18</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">설문·신청 폼을 만들어 질문·조건 분기를 넣고 게시해요. 제출된 응답도 가져올 수 있어요(학생 정보가 담길 수 있어요).</td>
+            </tr>
+            <tr>
+              <th scope="row"><div class="svc"><span class="jack" style="--c:#9AA6A2" aria-hidden="true"></span><div><span class="svc__name">Miro</span><span class="svc__handle">@Miro MCP</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.miro.com/</code><button type="button" class="copy" data-copy="https://mcp.miro.com/" aria-label="Miro 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">20</td>
+              <td class="num" data-label="쓰기·삭제">22</td>
+              <td class="teach" data-label="교사가 할 수 있는 일">화이트보드를 만들고 도식·그림·섹션을 올리고, 보드 공유와 권한까지 바꿔요.</td>
+            </tr>
+            <tr>
+              <th scope="row"><div class="svc"><span class="jack" style="--c:#9AA6A2" aria-hidden="true"></span><div><span class="svc__name">Draw.io</span><span class="svc__handle">@Drawio Mcp App</span></div></div></th>
+              <td data-label="MCP 주소"><div class="addr"><code>https://mcp.draw.io/mcp</code><button type="button" class="copy" data-copy="https://mcp.draw.io/mcp" aria-label="Draw.io 주소 복사">복사</button></div></td>
+              <td class="num" data-label="읽기">4</td>
+              <td class="num" data-label="쓰기·삭제"><span aria-hidden="true">–</span><span class="sr-only">표시 없음</span></td>
+              <td class="teach" data-label="교사가 할 수 있는 일">순서도·개념도 같은 다이어그램을 그려 줘요. 화면에 쓰기 동작은 따로 표시되지 않았어요.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">2026-11-23 화면 기준이에요. 동작 수는 서비스 업데이트에 따라 바뀔 수 있어요.</p>
+      <p class="sr-only" id="copy-status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- 5. 실제로 돌려 봤다 -->
+  <section class="section" id="demo" aria-labelledby="demo-title">
+    <div class="wrap">
+      <p class="line-tag">Line 04</p>
+      <h2 id="demo-title">실제로 돌려 봤다</h2>
+      <p class="lede">Task 모드에서 칩 4개를 넣고 아래 프롬프트 하나만 보냈어요. 중학교 1학년 과학 「물의 순환」 1차시 수업 준비예요.</p>
+
+      <div class="prompt">
+        <div class="prompt__bar">
+          <span>보낸 프롬프트 그대로</span>
+          <button type="button" class="copy" data-copy-target="prompt-text" aria-label="프롬프트 글자 복사">복사</button>
+        </div>
+        <div class="chips" aria-label="입력창에 넣은 커넥터 칩">
+          <span class="chip" style="--c:var(--canva)"><i aria-hidden="true"></i>@Canva MCP Server</span>
+          <span class="chip" style="--c:var(--kahoot)"><i aria-hidden="true"></i>@Kahoot MCP Server</span>
+          <span class="chip" style="--c:var(--padlet)"><i aria-hidden="true"></i>@Padlet MCP Server</span>
+          <span class="chip" style="--c:var(--notion)"><i aria-hidden="true"></i>@Notion MCP</span>
+        </div>
+<pre class="prompt__body" id="prompt-text">이 네 앱으로 중학교 1학년 과학 '물의 순환' 1차시(45분) 수업을 준비해 줘.
+1) Canva: 수업용 발표 자료 8장 (도입 질문, 증발, 응결, 강수, 지표수·지하수 흐름, 순환 전체 그림, 생활 속 예, 정리)
+2) Kahoot: 정리용 4지선다 퀴즈 8문항
+3) Padlet: 학생들이 '우리 주변 물의 순환 사례'를 올리는 보드 (섹션: 증발, 응결, 강수, 흐름)
+4) Notion: 수업 지도안 페이지 (학습 목표, 45분 흐름 표, 위 자료 링크 포함)
+마지막에 만든 4개의 링크를 정리해 줘.</pre>
+        <p class="prompt__hint">복사 버튼은 글자만 복사해요. 칩 4개는 입력창에서 <span class="kbd">@</span>를 눌러 직접 넣어 주세요.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>약 5분 20초</b><span>보낸 뒤 마지막 답변까지</span></div>
+        <div class="stat"><b>20번+</b><span>승인 창이 스무 번 넘게 떴어요(확인된 것 23번). 매번 「Allow once(이번만 허용)」</span></div>
+        <div class="stat"><b>4개</b><span>한 번에 만들어진 결과물</span></div>
+      </div>
+
+      <div class="frames">
+        <figure class="shot">
+          <a href="img/demo-thinking.jpg" target="_blank" rel="noopener"><img src="img/demo-thinking.jpg" width="1152" height="542" loading="lazy" alt="Thinking it through 상태. 제안된 프레젠테이션 디자인을 저장하고, Padlet을 생성하고 Canva 및 Kahoot 도구를 확장한다는 진행 문구와 generate-design 도구가 보여요."></a>
+          <figcaption>① 스스로 계획을 세우고 캔바 도구(generate-design)부터 불러요.</figcaption>
+        </figure>
+        <figure class="shot">
+          <a href="img/demo-allow.jpg" target="_blank" rel="noopener"><img src="img/demo-allow.jpg" width="1152" height="542" loading="lazy" alt="Padlet MCP Server 승인 카드. Let Gemini use create padlet? 아래에 Don't allow, Allow once, Always allow 버튼이 있어요."></a>
+          <figcaption>② 동작마다 승인 창이 떠요. 스무 번 넘게(확인된 것 23번) Allow once를 눌렀어요.</figcaption>
+        </figure>
+        <figure class="shot">
+          <a href="img/demo-final.jpg" target="_blank" rel="noopener"><img src="img/demo-final.jpg" width="1152" height="542" loading="lazy" alt="마지막 답변. 물의 순환 1차시 수업에 필요한 4가지 자료를 모두 준비했다며 Canva, Kahoot, Padlet, Notion 결과를 정리해 줘요."></a>
+          <figcaption>③ 마지막에 4가지 결과물과 링크를 정리해 줘요.</figcaption>
+        </figure>
+      </div>
+
+      <!-- Canva -->
+      <article class="result" style="--c:var(--canva)" aria-labelledby="r-canva">
+        <div class="result__head">
+          <h3 id="r-canva">Canva 발표 자료</h3>
+          <span class="badge badge--ok">8장 만들어짐</span>
+          <span class="badge badge--warn">구성 2장 빠짐 · 그림 속 글자 깨짐</span>
+        </div>
+        <p class="result__title">제목 <q>프레젠테이션 - 물의 순환: 지구를 여행하는 물</q></p>
+        <ul class="slides">
+          <li><figure><img src="img/canva-1.jpg" width="596" height="335" loading="lazy" alt="1장 표지: 물의 순환: 지구를 여행하는 물, 중학교 1학년 과학 수업"><figcaption><span class="n">1</span>표지</figcaption></figure></li>
+          <li><figure><img src="img/canva-2.jpg" width="596" height="335" loading="lazy" alt="2장: 물의 순환에 대한 호기심. 오른쪽 영어 인포그래픽 그림의 글자가 깨져 있어요."><figcaption><span class="n">2</span>물의 순환에 대한 호기심<br><span class="flag">그림 속 영어 깨짐</span></figcaption></figure></li>
+          <li><figure><img src="img/canva-3.jpg" width="596" height="335" loading="lazy" alt="3장: 증발: 태양 에너지로 상승. 수면 위로 수증기가 오르는 그림"><figcaption><span class="n">3</span>증발</figcaption></figure></li>
+          <li><figure><img src="img/canva-4.jpg" width="596" height="335" loading="lazy" alt="4장: 응결: 수증기가 모여 구름으로. 그림 제목이 THE COUDIENTISATION처럼 깨져 있어요."><figcaption><span class="n">4</span>응결<br><span class="flag">그림 속 영어 깨짐</span></figcaption></figure></li>
+          <li><figure><img src="img/canva-5.jpg" width="596" height="335" loading="lazy" alt="5장: 강수: 중력으로 내리는 물. 구름에서 비와 눈이 내리는 그림"><figcaption><span class="n">5</span>강수</figcaption></figure></li>
+          <li><figure><img src="img/canva-6.jpg" width="596" height="335" loading="lazy" alt="6장: 지표수와 지하수의 흐름. 그림 속 Rroundwater vaten 같은 깨진 영어가 보여요."><figcaption><span class="n">6</span>지표수와 지하수의 흐름<br><span class="flag">그림 속 영어 깨짐</span></figcaption></figure></li>
+          <li><figure><img src="img/canva-7.jpg" width="596" height="335" loading="lazy" alt="7장: 물의 순환 전체 그림. 그림 속 PRAPCITATION, FLEXICITATION 같은 깨진 영어가 보여요."><figcaption><span class="n">7</span>물의 순환 전체 그림<br><span class="flag">그림 속 영어 깨짐</span></figcaption></figure></li>
+          <li><figure><img src="img/canva-8.jpg" width="596" height="335" loading="lazy" alt="8장 마무리 표지: 물의 순환, 물의 흐름과 우리의 삶"><figcaption><span class="n">8</span>마무리 표지</figcaption></figure></li>
+        </ul>
+        <div class="warn warn--sm" role="note">
+          <p class="warn__title">요청과 다른 점</p>
+          <p>요청한 <strong>「생활 속 예」</strong>, <strong>「정리」</strong> 장이 따로 없어요. 그런데 제미나이는 답변에서 "생활 속 예, 핵심 정리까지 8개"를 만들었다고 했어요.</p>
+          <p>2·4·6·7장의 AI 그림 속 영어 철자가 깨졌어요. 예: <span class="kbd">Cenprization</span> <span class="kbd">THE COUDIENTISATION</span> <span class="kbd">Rroundwater vaten</span> <span class="kbd">PRAPCITATION</span> <span class="kbd">FLEXICITATION</span></p>
+        </div>
+      </article>
+
+      <!-- Kahoot -->
+      <article class="result" style="--c:var(--kahoot)" aria-labelledby="r-kahoot">
+        <div class="result__head">
+          <h3 id="r-kahoot">Kahoot 퀴즈</h3>
+          <span class="badge badge--ok">정답 8/8 맞음</span>
+          <span class="badge">4지선다 · 문항당 20초</span>
+        </div>
+        <p class="result__title">제목 <q>중1 과학 - 물의 순환 정리 퀴즈 (8문항)</q> · 초록 표시가 정답이에요.</p>
+        <ol class="quiz" id="quiz"></ol>
+        <noscript><p class="src">문항 목록은 자바스크립트로 그려요.</p></noscript>
+      </article>
+
+      <!-- Padlet -->
+      <article class="result" style="--c:var(--padlet)" aria-labelledby="r-padlet">
+        <div class="result__head">
+          <h3 id="r-padlet">Padlet 보드</h3>
+          <span class="badge badge--ok">섹션 4개 + 예시 글</span>
+          <span class="badge badge--warn">익명 글쓰기 열림</span>
+        </div>
+        <p class="result__title">제목 <q>우리 주변 물의 순환 사례</q> · 선반형 · 섹션 증발·응결·강수·흐름에 [예시] 글 1개씩 · 댓글·반응 꺼짐</p>
+        <figure class="shot padlet-shot">
+          <a href="img/padlet.jpg" target="_blank" rel="noopener"><img src="img/padlet.jpg" width="1200" height="552" loading="lazy" alt="패들렛 보드 화면. 코르크 배경에 증발, 응결, 강수, 흐름 네 섹션이 있고 각각 [예시] 글이 하나씩 있어요. 로그인하지 않은 화면인데 오른쪽 아래에 + 게시 버튼이 보여요."></a>
+          <figcaption>로그인하지 않은 브라우저로 연 화면이에요. 오른쪽 아래에 「+ 게시」 버튼이 보여요.</figcaption>
+        </figure>
+        <div class="warn warn--sm" role="note">
+          <p class="warn__title">학생에게 주기 전에 공유 설정 확인</p>
+          <p>링크만 있으면 <strong>로그인 없이 누구나 글을 쓸 수 있게</strong> 만들어졌어요. 제미나이도 답변에서 같은 내용을 알려 줬어요. 학생에게 링크를 주기 전에 패들렛 공유 설정을 꼭 확인하세요.</p>
+        </div>
+      </article>
+
+      <!-- Notion -->
+      <article class="result" style="--c:var(--notion)" aria-labelledby="r-notion">
+        <div class="result__head">
+          <h3 id="r-notion">Notion 수업 지도안</h3>
+          <span class="badge badge--ok">비공개 초안</span>
+          <span class="badge badge--warn">슬라이드 번호 어긋남</span>
+        </div>
+        <p class="result__title">제목 <q>💧 중학교 1학년 과학 1차시 수업 지도안: 물의 순환 (45분)</q></p>
+        <div class="two">
+          <div>
+            <p class="label">들어 있는 것</p>
+            <ul class="notion-list">
+              <li>학습 목표 3개</li>
+              <li>45분 흐름표 5단계 (오른쪽)</li>
+              <li>자료 링크: 캔바(보기·편집), 패들렛, 카훗</li>
+              <li>유의사항 2개</li>
+            </ul>
+          </div>
+          <div>
+            <p class="label">45분 흐름표</p>
+            <div class="flow">
+              <div class="flow__bar" role="list" aria-label="45분 수업 흐름">
+                <div class="flow__seg" role="listitem" style="flex:5"><span>도입</span><b>5분</b></div>
+                <div class="flow__seg" role="listitem" style="flex:15"><span>개념</span><b>15분</b></div>
+                <div class="flow__seg" role="listitem" style="flex:7"><span>통합</span><b>7분</b></div>
+                <div class="flow__seg" role="listitem" style="flex:10"><span>패들렛 활동</span><b>10분</b></div>
+                <div class="flow__seg" role="listitem" style="flex:8"><span>정리·카훗</span><b>8분</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="warn warn--sm" role="note">
+          <p class="warn__title">지도안의 슬라이드 번호가 실제 덱과 한 장씩 어긋나요</p>
+          <table class="mismatch">
+            <caption class="sr-only">지도안에 적힌 슬라이드 번호와 실제 캔바 덱 비교</caption>
+            <thead><tr><th scope="col">내용</th><th scope="col">지도안에 적힌 번호</th><th scope="col">실제 덱</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">개념(증발~흐름)</th><td>2~5</td><td>3~6</td></tr>
+              <tr><th scope="row">순환 전체 그림</th><td>6</td><td>7</td></tr>
+              <tr><th scope="row">생활 사례</th><td>7</td><td>없음</td></tr>
+              <tr><th scope="row">요약</th><td>8</td><td>없음 (8장은 마무리 표지)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <p class="table-note">만들어진 캔바·카훗·패들렛·노션 링크는 편집용 주소이거나 열린 보드라서 이 페이지에 걸지 않았어요.</p>
+    </div>
+  </section>
+
+  <!-- 6. 쓰기 전에 꼭 -->
+  <section class="section" id="check" aria-labelledby="check-title">
+    <div class="wrap">
+      <p class="line-tag">Line 05</p>
+      <h2 id="check-title">쓰기 전에 꼭</h2>
+      <p class="lede">편하지만, 내 계정의 앱을 AI가 직접 만지는 일이에요. 다섯 가지만 지켜 주세요.</p>
+      <ul class="checklist">
+        <li><span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b>학생 개인정보는 넣지 않아요</b><span class="d">이름·번호·성적처럼 학생을 알아볼 수 있는 정보는 프롬프트에도, 만들어질 자료에도 넣지 마세요.</span></div></li>
+        <li><span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b>「Always allow」는 읽기 동작에만</b><span class="d">승인 클릭이 번거로워도 쓰기·삭제 동작은 「Always ask」로 두는 게 안전해요.</span></div></li>
+        <li><span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b>받은 링크는 편집용이에요</b><span class="d">학생에게 공유하기 전에 각 서비스의 공유 설정(보기 전용, 로그인 필요 여부)을 확인하세요.</span></div></li>
+        <li><span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b>결과물은 사람이 검토해요</b><span class="d">이번에도 빠진 슬라이드, 어긋난 슬라이드 번호, 그림 속 깨진 글자가 나왔어요. 수업 전에 꼭 한 번 훑어보세요.</span></div></li>
+        <li><span class="box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><b>구글이 검토하지 않은 커스텀 앱이에요</b><span class="d">연결할 때 경고가 뜨는 이유예요. 공식 서비스 주소인지 확인하고, 안 쓰는 커넥터는 연결을 끊어 두세요.</span></div></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- 7. Footer -->
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div>
+      <h2>누구나쉽게 · TechKwon(테크권)</h2>
+      <p>이제 제미나이가 캔바, 카훗, 노션, 패들렛을 마음대로 조종한다 그런데 한국은 무료라고?</p>
+    </div>
+    <ul>
+      <li><a id="video-link-footer" href="#">영상 보러 가기 →</a></li>
+      <li><a href="https://techkwon.github.io/lab-hub/" rel="noopener" target="_blank">시리즈 허브 (lab-hub) →</a></li>
+    </ul>
+  </div>
+  <div class="wrap"><small>확인 날짜 2026-11-23 · 화면과 동작 수는 서비스 업데이트에 따라 달라질 수 있어요.</small></div>
+</footer>
+
+<script>
+(function(){
+  /* Kahoot quiz (from research/results/kahoot.json) */
+  var quiz=[
+    {q:"햇볕에 젖은 빨래가 마르거나 바닷물이 수증기로 변해 하늘로 올라가는 현상은?",c:["용해","강수","응결","증발"],a:3},
+    {q:"물의 순환에서 바다나 강의 물을 증발시키는 가장 주된 에너지원은 무엇인가요?",c:["자기력","태양 에너지","마찰력","지구 중력"],a:1},
+    {q:"하늘로 올라간 수증기가 식어서 작은 물방울이나 얼음 알갱이로 변해 구름이 되는 과정은?",c:["증발","응결","강수","증산"],a:1},
+    {q:"여름철 차가운 음료수 컵 표면에 물방울이 맺히는 현상은 물의 순환 중 무엇과 같나요?",c:["강수","흐름","증발","응결"],a:3},
+    {q:"구름 속 물방울이 커지고 무거워져 비나 눈의 형태로 땅과 바다에 떨어지는 현상은?",c:["지하수 흐름","응결","증발","강수"],a:3},
+    {q:"비와 눈을 아래로 내리게 하고, 강물이 높은 곳에서 낮은 바다로 흐르게 하는 힘은?",c:["달의 인력","기압 차이","태양 에너지","지구 중력"],a:3},
+    {q:"육지에 내린 빗물은 주로 어떻게 이동하여 바다로 돌아가나요?",c:["항상 얼음 상태로 땅 위에만 머문다.","스스로 분해되어 소금이 된다.","강이나 호수로 흐르거나 땅속으로 스며들어 지하수가 된다.","모두 우주 공간으로 날아가 사라진다."],a:2},
+    {q:"물의 순환이 끊임없이 일어날 때, 지구 전체 물의 양에 대한 설명으로 옳은 것은?",c:["증발이 일어나면 지구의 물이 영원히 줄어든다.","지구 전체의 물의 총량은 변하지 않고 일정하게 유지된다.","비가 내릴수록 바닷물의 양만 계속 늘어난다.","육지의 물은 바다로 절대 돌아가지 않는다."],a:1}
+  ];
+  var ol=document.getElementById("quiz");
+  if(ol){
+    quiz.forEach(function(item){
+      var li=document.createElement("li");
+      var p=document.createElement("p");p.className="quiz__q";p.textContent=item.q;li.appendChild(p);
+      var ul=document.createElement("ul");ul.className="choices";
+      item.c.forEach(function(ch,i){
+        var c=document.createElement("li");c.textContent=ch;
+        if(i===item.a){c.className="ans";var s=document.createElement("span");s.className="sr-only";s.textContent=" (정답)";c.appendChild(s);}
+        ul.appendChild(c);
+      });
+      li.appendChild(ul);ol.appendChild(li);
+    });
+  }
+
+  /* copy buttons */
+  var status=document.getElementById("copy-status");
+  function fallbackCopy(text){
+    var ta=document.createElement("textarea");
+    ta.value=text;ta.setAttribute("readonly","");
+    ta.style.position="fixed";ta.style.top="-1000px";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{ta.setSelectionRange(0,text.length);}catch(e){}
+    var ok=false;try{ok=document.execCommand("copy");}catch(e){ok=false;}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function done(btn,ok){
+    var orig=btn.getAttribute("data-label")||btn.textContent;
+    btn.setAttribute("data-label",orig);
+    btn.textContent=ok?"복사됨":"복사 실패";
+    btn.classList.toggle("is-done",ok);
+    if(status){status.textContent=ok?"복사됨":"복사하지 못했어요. 직접 선택해 복사해 주세요.";}
+    clearTimeout(btn._t);
+    btn._t=setTimeout(function(){btn.textContent=orig;btn.classList.remove("is-done");},1800);
+  }
+  document.addEventListener("click",function(e){
+    var btn=e.target.closest&&e.target.closest(".copy");
+    if(!btn)return;
+    var text=btn.getAttribute("data-copy");
+    var tid=btn.getAttribute("data-copy-target");
+    if(!text&&tid){var el=document.getElementById(tid);text=el?el.textContent.trim():"";}
+    if(!text)return;
+    if(navigator.clipboard&&window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){done(btn,true);},function(){done(btn,fallbackCopy(text));});
+    }else{
+      done(btn,fallbackCopy(text));
+    }
+  });
+})();
+</script>
+</body>
+</html>
